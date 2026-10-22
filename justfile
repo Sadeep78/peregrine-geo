@@ -20,6 +20,7 @@ verify-protocol:
 # Backend workspace verification
 verify-backend:
     node --test ./backend/tests/integration.test.mjs
+    node --test ./backend/tests/fleet-e2e.test.mjs
     @Write-Host "✔ Backend workspace verified" -ForegroundColor Green
 
 # Web workspace verification
@@ -43,6 +44,7 @@ typecheck:
 test:
     node --test ./protocol/tests/contract.test.mjs
     node --test ./backend/tests/integration.test.mjs
+    node --test ./backend/tests/fleet-e2e.test.mjs
     node --test ./tools/device-sim/tests/benchmark-500.test.mjs
     node ./scripts/test-kotlin.mjs
 
