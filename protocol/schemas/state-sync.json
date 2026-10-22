@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://peregrinegeo.dev/schemas/state-sync.json",
+  "title": "StateSyncPayload",
+  "type": "object",
+  "required": ["deviceId", "state", "activeMock"],
+  "additionalProperties": false,
+  "properties": {
+    "deviceId": { "type": "string", "minLength": 1 },
+    "state": {
+      "type": "string",
+      "enum": ["idle", "preview", "playing", "paused", "error"]
+    },
+    "activeMock": { "type": "boolean" },
+    "currentRouteId": { "type": "string" },
+    "progressPct": { "type": "number", "minimum": 0, "maximum": 100 },
+    "motionProfile": {
+      "type": "string",
+      "enum": ["walk", "run", "bike", "drive", "custom"]
+    },
+    "speedMultiplier": { "type": "number", "minimum": 0.1, "maximum": 20.0 },
+    "seed": { "type": "integer" }
+  }
+}

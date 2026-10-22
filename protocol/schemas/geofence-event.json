@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://peregrinegeo.dev/schemas/geofence-event.json",
+  "title": "GeofenceEventPayload",
+  "type": "object",
+  "required": ["geofenceId", "deviceId", "event", "ts", "lat", "lng"],
+  "additionalProperties": false,
+  "properties": {
+    "geofenceId": { "type": "string", "minLength": 1 },
+    "deviceId": { "type": "string", "minLength": 1 },
+    "event": {
+      "type": "string",
+      "enum": ["enter", "exit", "dwell"]
+    },
+    "ts": { "type": "integer", "minimum": 0 },
+    "lat": { "type": "number", "minimum": -90, "maximum": 90 },
+    "lng": { "type": "number", "minimum": -180, "maximum": 180 }
+  }
+}

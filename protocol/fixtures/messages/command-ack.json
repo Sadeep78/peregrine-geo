@@ -1,0 +1,12 @@
+{
+  "v": 1,
+  "id": "a0000000-0000-0000-0000-000000000005",
+  "type": "command.ack",
+  "ts": 1774000003250,
+  "payload": {
+    "commandId": "cmd-001",
+    "deviceId": "dev-pixel7-01",
+    "status": "acked",
+    "executedAt": 1774000003240
+  }
+}

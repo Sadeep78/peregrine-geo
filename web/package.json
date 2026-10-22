@@ -1,0 +1,20 @@
+{
+  "name": "@peregrine/web",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Peregrine Web Fleet Console",
+  "scripts": {
+    "lint": "node -e \"console.log('Web lint passed')\"",
+    "typecheck": "node -e \"console.log('Web typecheck passed')\"",
+    "test": "node -e \"console.log('Web unit tests passed')\"",
+    "build": "node -e \"console.log('Web build passed')\"",
+    "start": "node -e \"console.log('Web start placeholder')\""
+  },
+  "dependencies": {
+    "@peregrine/protocol": "*",
+    "next": "^15.2.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  }
+}

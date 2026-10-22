@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://peregrinegeo.dev/schemas/command.json",
+  "title": "CommandPayload",
+  "type": "object",
+  "required": ["commandId", "name", "idempotencyKey", "ttlMs", "issuedAt", "params"],
+  "additionalProperties": false,
+  "properties": {
+    "commandId": { "type": "string", "minLength": 1 },
+    "name": {
+      "type": "string",
+      "enum": [
+        "start_mock",
+        "pause_mock",
+        "resume_mock",
+        "stop_mock",
+        "teleport",
+        "set_speed_multiplier",
+        "set_profile"
+      ]
+    },
+    "idempotencyKey": { "type": "string", "minLength": 1 },
+    "ttlMs": { "type": "integer", "minimum": 1000 },
+    "issuedAt": { "type": "integer", "minimum": 0 },
+    "params": { "type": "object" }
+  }
+}

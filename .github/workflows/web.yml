@@ -1,0 +1,27 @@
+name: Web CI
+
+on:
+  push:
+    paths:
+      - 'web/**'
+      - 'protocol/**'
+      - '.github/workflows/web.yml'
+  pull_request:
+    paths:
+      - 'web/**'
+      - 'protocol/**'
+      - '.github/workflows/web.yml'
+
+jobs:
+  verify:
+    name: Verify Web Console
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: extractions/setup-just@v2
+
+      - name: Verify Web
+        run: just verify-web

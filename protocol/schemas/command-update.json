@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://peregrinegeo.dev/schemas/command-update.json",
+  "title": "CommandUpdatePayload",
+  "type": "object",
+  "required": ["commandId", "deviceId", "status", "issuedAt"],
+  "additionalProperties": false,
+  "properties": {
+    "commandId": { "type": "string", "minLength": 1 },
+    "deviceId": { "type": "string", "minLength": 1 },
+    "status": {
+      "type": "string",
+      "enum": ["queued", "sent", "delivered", "acked", "failed", "expired"]
+    },
+    "issuedAt": { "type": "integer", "minimum": 0 },
+    "completedAt": { "type": "integer", "minimum": 0 },
+    "error": { "type": "string" }
+  }
+}

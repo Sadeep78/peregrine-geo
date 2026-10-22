@@ -1,0 +1,13 @@
+{
+  "v": 1,
+  "id": "a0000000-0000-0000-0000-000000000010",
+  "type": "command.update",
+  "ts": 1774000008000,
+  "payload": {
+    "commandId": "cmd-001",
+    "deviceId": "dev-pixel7-01",
+    "status": "acked",
+    "issuedAt": 1774000003000,
+    "completedAt": 1774000003250
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "name": "@peregrine/protocol",
+  "version": "0.1.0",
+  "description": "Single source of truth for Peregrine device<->cloud message contracts and kinematic golden vectors",
+  "private": true,
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "lint": "node ./scripts/lint.mjs",
+    "test": "node --test ./tests/contract.test.mjs",
+    "build": "node ./scripts/build.mjs",
+    "verify": "npm run lint && npm run test && npm run build"
+  },
+  "dependencies": {
+    "ajv": "^8.17.1",
+    "ajv-formats": "^3.0.1"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.2"
+  }
+}

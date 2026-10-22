@@ -1,0 +1,16 @@
+{
+  "v": 1,
+  "id": "a0000000-0000-0000-0000-000000000006",
+  "type": "state.sync",
+  "ts": 1774000004000,
+  "payload": {
+    "deviceId": "dev-pixel7-01",
+    "state": "playing",
+    "activeMock": true,
+    "currentRouteId": "route-market-st",
+    "progressPct": 34.2,
+    "motionProfile": "drive",
+    "speedMultiplier": 1.0,
+    "seed": 1337
+  }
+}

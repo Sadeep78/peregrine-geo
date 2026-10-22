@@ -1,0 +1,73 @@
+{
+  "$schema": "https://peregrinegeo.dev/schemas/golden-vectors.json",
+  "version": 1,
+  "description": "Kinematics Golden Vectors shared between Kotlin KinematicMovementEngine and Web TypeScript port",
+  "suites": [
+    {
+      "id": "walk_straight_ideal_seed100",
+      "profile": "walk",
+      "motionProfile": {
+        "vTarget": 1.4,
+        "aAcc": 0.8,
+        "aDec": 1.2,
+        "aLatMax": 1.5
+      },
+      "noiseProfile": "ideal",
+      "seed": 100,
+      "tickHz": 10,
+      "waypoints": [
+        { "lat": 37.774900, "lon": -122.419400, "ele": 10.0 },
+        { "lat": 37.775900, "lon": -122.419400, "ele": 10.0 }
+      ],
+      "goldenSamples": [
+        {
+          "step": 0,
+          "dtMs": 0,
+          "lat": 37.7749000,
+          "lon": -122.4194000,
+          "speed": 0.0,
+          "bearing": 0.0,
+          "accuracy": 1.0
+        },
+        {
+          "step": 10,
+          "dtMs": 1000,
+          "lat": 37.7749036,
+          "lon": -122.4194000,
+          "speed": 0.8,
+          "bearing": 0.0,
+          "accuracy": 1.0
+        }
+      ]
+    },
+    {
+      "id": "drive_90deg_turn_opensky_seed42",
+      "profile": "drive",
+      "motionProfile": {
+        "vTarget": 18.0,
+        "aAcc": 2.5,
+        "aDec": 4.0,
+        "aLatMax": 3.0
+      },
+      "noiseProfile": "opensky",
+      "seed": 42,
+      "tickHz": 10,
+      "waypoints": [
+        { "lat": 37.770000, "lon": -122.420000, "ele": 5.0 },
+        { "lat": 37.775000, "lon": -122.420000, "ele": 5.0 },
+        { "lat": 37.775000, "lon": -122.415000, "ele": 5.0 }
+      ],
+      "goldenSamples": [
+        {
+          "step": 0,
+          "dtMs": 0,
+          "lat": 37.7700000,
+          "lon": -122.4200000,
+          "speed": 0.0,
+          "bearing": 0.0,
+          "accuracy": 1.5
+        }
+      ]
+    }
+  ]
+}

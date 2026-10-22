@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://peregrinegeo.dev/schemas/envelope.json",
+  "title": "ProtocolEnvelope",
+  "type": "object",
+  "required": ["v", "id", "type", "ts", "payload"],
+  "additionalProperties": false,
+  "properties": {
+    "v": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Protocol schema version"
+    },
+    "id": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Unique identifier for this message"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "hello",
+        "heartbeat",
+        "telemetry.batch",
+        "command.ack",
+        "state.sync",
+        "command",
+        "time.sync",
+        "error",
+        "device.update",
+        "command.update",
+        "geofence.event",
+        "scenario.update"
+      ],
+      "description": "Message type"
+    },
+    "ts": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Unix millisecond timestamp"
+    },
+    "payload": {
+      "type": "object",
+      "description": "Type-specific payload"
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://peregrinegeo.dev/schemas/hello.json",
+  "title": "HelloPayload",
+  "type": "object",
+  "required": ["deviceId", "model", "osVersion", "appVersion", "capabilities", "remoteStandby"],
+  "additionalProperties": false,
+  "properties": {
+    "deviceId": { "type": "string", "minLength": 1 },
+    "model": { "type": "string" },
+    "osVersion": { "type": "string" },
+    "appVersion": { "type": "string" },
+    "capabilities": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "remoteStandby": { "type": "boolean" }
+  }
+}

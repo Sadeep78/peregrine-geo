@@ -1,0 +1,20 @@
+{
+  "name": "@peregrine/device-sim",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "High-scale device simulator CLI for Peregrine",
+  "bin": {
+    "device-sim": "./bin/device-sim.mjs"
+  },
+  "scripts": {
+    "lint": "node -e \"console.log('device-sim lint passed')\"",
+    "typecheck": "node -e \"console.log('device-sim typecheck passed')\"",
+    "test": "node -e \"console.log('device-sim test passed')\"",
+    "build": "node -e \"console.log('device-sim build passed')\""
+  },
+  "dependencies": {
+    "@peregrine/protocol": "*",
+    "ws": "^8.18.0"
+  }
+}

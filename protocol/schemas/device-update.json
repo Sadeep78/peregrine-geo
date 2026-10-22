@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://peregrinegeo.dev/schemas/device-update.json",
+  "title": "DeviceUpdatePayload",
+  "type": "object",
+  "required": [
+    "deviceId",
+    "status",
+    "lastSeen",
+    "lat",
+    "lng",
+    "speed",
+    "bearing",
+    "accuracy",
+    "batteryPct",
+    "remoteControlEnabled",
+    "remoteStandby"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "deviceId": { "type": "string", "minLength": 1 },
+    "status": {
+      "type": "string",
+      "enum": ["connected", "mocking", "idle", "stale", "disconnected"]
+    },
+    "lastSeen": { "type": "integer", "minimum": 0 },
+    "lat": { "type": "number", "minimum": -90, "maximum": 90 },
+    "lng": { "type": "number", "minimum": -180, "maximum": 180 },
+    "altitude": { "type": "number" },
+    "speed": { "type": "number", "minimum": 0 },
+    "bearing": { "type": "number", "minimum": 0, "maximum": 360 },
+    "accuracy": { "type": "number", "minimum": 0 },
+    "batteryPct": { "type": "number", "minimum": 0, "maximum": 100 },
+    "eta": { "type": "integer" },
+    "remoteControlEnabled": { "type": "boolean" },
+    "remoteStandby": { "type": "boolean" },
+    "currentRouteId": { "type": "string" }
+  }
+}

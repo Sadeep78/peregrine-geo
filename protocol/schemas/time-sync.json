@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://peregrinegeo.dev/schemas/time-sync.json",
+  "title": "TimeSyncPayload",
+  "type": "object",
+  "required": ["clientSendTs", "serverReceiveTs", "serverSendTs"],
+  "additionalProperties": false,
+  "properties": {
+    "clientSendTs": { "type": "integer", "minimum": 0 },
+    "serverReceiveTs": { "type": "integer", "minimum": 0 },
+    "serverSendTs": { "type": "integer", "minimum": 0 }
+  }
+}

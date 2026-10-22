@@ -1,0 +1,20 @@
+{
+  "name": "peregrine-root",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Peregrine: Android mock-location client, kinematic simulation engine, and cloud fleet console",
+  "license": "Apache-2.0",
+  "workspaces": [
+    "protocol",
+    "backend",
+    "web",
+    "tools/device-sim"
+  ],
+  "scripts": {
+    "verify": "npm run lint && npm run typecheck && npm run test && npm run build",
+    "lint": "npm run lint --workspaces --if-present",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present",
+    "build": "npm run build --workspaces --if-present"
+  }
+}

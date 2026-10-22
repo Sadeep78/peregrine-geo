@@ -1,0 +1,13 @@
+{
+  "v": 1,
+  "id": "a0000000-0000-0000-0000-000000000002",
+  "type": "heartbeat",
+  "ts": 1774000001000,
+  "payload": {
+    "deviceId": "dev-pixel7-01",
+    "batteryPct": 88.5,
+    "charging": false,
+    "currentMode": "playing",
+    "activeMock": true
+  }
+}

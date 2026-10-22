@@ -1,0 +1,13 @@
+{
+  "v": 1,
+  "id": "a0000000-0000-0000-0000-000000000008",
+  "type": "error",
+  "ts": 1774000006000,
+  "payload": {
+    "code": "DEVICE_NOT_FOUND",
+    "message": "The requested device was not registered in this organization",
+    "details": {
+      "deviceId": "dev-unknown-999"
+    }
+  }
+}

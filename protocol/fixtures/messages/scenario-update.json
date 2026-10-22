@@ -1,0 +1,21 @@
+{
+  "v": 1,
+  "id": "a0000000-0000-0000-0000-000000000012",
+  "type": "scenario.update",
+  "ts": 1774000010000,
+  "payload": {
+    "scenarioRunId": "scen-run-converge-01",
+    "status": "running",
+    "startSkewMs": 142.5,
+    "deviceStatuses": {
+      "dev-pixel7-01": {
+        "status": "active",
+        "skewMs": 120.0
+      },
+      "dev-galaxy-02": {
+        "status": "active",
+        "skewMs": 165.0
+      }
+    }
+  }
+}

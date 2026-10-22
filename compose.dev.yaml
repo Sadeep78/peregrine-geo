@@ -1,0 +1,97 @@
+name: peregrine-dev
+
+services:
+  postgres:
+    image: postgis/postgis:16-3.4
+    container_name: peregrine-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-peregrine}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-peregrine_dev_pass}
+      POSTGRES_DB: ${POSTGRES_DB:-peregrine_dev}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-peregrine} -d ${POSTGRES_DB:-peregrine_dev}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  redis:
+    image: redis:7-alpine
+    container_name: peregrine-redis
+    restart: unless-stopped
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+
+  osrm-car:
+    image: ghcr.io/project-osrm/osrm-backend:latest
+    container_name: peregrine-osrm-car
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    volumes:
+      - osrm_data:/data
+    command: osrm-routed --algorithm mld --max-table-size 1000 /data/car.osrm
+    profiles:
+      - full-stack
+
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    container_name: peregrine-backend
+    restart: unless-stopped
+    environment:
+      NODE_ENV: development
+      PORT: 4000
+      DATABASE_URL: postgresql://${POSTGRES_USER:-peregrine}:${POSTGRES_PASSWORD:-peregrine_dev_pass}@postgres:5432/${POSTGRES_DB:-peregrine_dev}?schema=public
+      REDIS_URL: redis://redis:6379
+      JWT_SECRET: ${JWT_SECRET:-peregrine_dev_jwt_secret_min_32_bytes_test_key_0123456789}
+      REFRESH_TOKEN_SECRET: ${REFRESH_TOKEN_SECRET:-peregrine_dev_refresh_secret_min_32_bytes_test_key_0123456789}
+      WEBHOOK_SIGNING_SECRET: ${WEBHOOK_SIGNING_SECRET:-peregrine_dev_webhook_signing_secret_hmac_sha256_key_12345}
+      OSRM_CAR_URL: http://osrm-car:5000
+    ports:
+      - "4000:4000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    profiles:
+      - full-stack
+
+  web:
+    build:
+      context: .
+      dockerfile: web/Dockerfile
+    container_name: peregrine-web
+    restart: unless-stopped
+    environment:
+      NODE_ENV: development
+      PORT: 3000
+      NEXT_PUBLIC_API_URL: http://backend:4000
+      NEXT_PUBLIC_WS_URL: ws://backend:4000
+      NEXT_PUBLIC_MAP_STYLE_URL: ${NEXT_PUBLIC_MAP_STYLE_URL:-https://demotiles.maplibre.org/style.json}
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    profiles:
+      - full-stack
+
+volumes:
+  postgres_data:
+  redis_data:
+  osrm_data:

@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://peregrinegeo.dev/schemas/command-ack.json",
+  "title": "CommandAckPayload",
+  "type": "object",
+  "required": ["commandId", "deviceId", "status", "executedAt"],
+  "additionalProperties": false,
+  "properties": {
+    "commandId": { "type": "string", "minLength": 1 },
+    "deviceId": { "type": "string", "minLength": 1 },
+    "status": {
+      "type": "string",
+      "enum": ["acked", "failed", "rejected"]
+    },
+    "error": { "type": "string" },
+    "executedAt": { "type": "integer", "minimum": 0 }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "v": 1,
+  "id": "a0000000-0000-0000-0000-000000000009",
+  "type": "device.update",
+  "ts": 1774000007000,
+  "payload": {
+    "deviceId": "dev-pixel7-01",
+    "status": "mocking",
+    "lastSeen": 1774000007000,
+    "lat": 37.774929,
+    "lng": -122.419416,
+    "altitude": 15.2,
+    "speed": 6.0,
+    "bearing": 182.5,
+    "accuracy": 2.0,
+    "batteryPct": 88,
+    "eta": 1774000450000,
+    "remoteControlEnabled": true,
+    "remoteStandby": true,
+    "currentRouteId": "route-market-st"
+  }
+}

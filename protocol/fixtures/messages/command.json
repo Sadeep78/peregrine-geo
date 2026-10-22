@@ -1,0 +1,19 @@
+{
+  "v": 1,
+  "id": "a0000000-0000-0000-0000-000000000004",
+  "type": "command",
+  "ts": 1774000003000,
+  "payload": {
+    "commandId": "cmd-001",
+    "name": "start_mock",
+    "idempotencyKey": "idem-key-991823",
+    "ttlMs": 60000,
+    "issuedAt": 1774000003000,
+    "params": {
+      "mode": "once",
+      "profile": "drive",
+      "speedMultiplier": 1.0,
+      "routeId": "route-market-st"
+    }
+  }
+}

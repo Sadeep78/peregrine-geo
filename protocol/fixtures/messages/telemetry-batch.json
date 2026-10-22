@@ -1,0 +1,38 @@
+{
+  "v": 1,
+  "id": "a0000000-0000-0000-0000-000000000003",
+  "type": "telemetry.batch",
+  "ts": 1774000002000,
+  "payload": {
+    "deviceId": "dev-pixel7-01",
+    "seq": 42,
+    "points": [
+      {
+        "lat": 37.774929,
+        "lng": -122.419416,
+        "altitude": 15.2,
+        "speed": 5.8,
+        "bearing": 182.4,
+        "accuracy": 2.1,
+        "ts": 1774000001500,
+        "verticalAccuracy": 3.0,
+        "speedAccuracy": 0.2,
+        "bearingAccuracy": 1.5,
+        "zoneId": "open-sky-default"
+      },
+      {
+        "lat": 37.774880,
+        "lng": -122.419420,
+        "altitude": 15.3,
+        "speed": 6.0,
+        "bearing": 182.5,
+        "accuracy": 2.0,
+        "ts": 1774000002000,
+        "verticalAccuracy": 3.0,
+        "speedAccuracy": 0.2,
+        "bearingAccuracy": 1.5,
+        "zoneId": "open-sky-default"
+      }
+    ]
+  }
+}

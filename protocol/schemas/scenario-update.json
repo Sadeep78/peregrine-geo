@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://peregrinegeo.dev/schemas/scenario-update.json",
+  "title": "ScenarioUpdatePayload",
+  "type": "object",
+  "required": ["scenarioRunId", "status", "deviceStatuses"],
+  "additionalProperties": false,
+  "properties": {
+    "scenarioRunId": { "type": "string", "minLength": 1 },
+    "status": {
+      "type": "string",
+      "enum": ["pending", "running", "completed", "failed", "stopped"]
+    },
+    "startSkewMs": { "type": "number" },
+    "deviceStatuses": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "required": ["status"],
+        "properties": {
+          "status": { "type": "string" },
+          "skewMs": { "type": "number" },
+          "error": { "type": "string" }
+        }
+      }
+    }
+  }
+}

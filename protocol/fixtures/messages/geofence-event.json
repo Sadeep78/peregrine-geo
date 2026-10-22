@@ -1,0 +1,14 @@
+{
+  "v": 1,
+  "id": "a0000000-0000-0000-0000-000000000011",
+  "type": "geofence.event",
+  "ts": 1774000009000,
+  "payload": {
+    "geofenceId": "geo-sf-financial-district",
+    "deviceId": "dev-pixel7-01",
+    "event": "enter",
+    "ts": 1774000009000,
+    "lat": 37.7946,
+    "lng": -122.3999
+  }
+}

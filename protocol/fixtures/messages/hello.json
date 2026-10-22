@@ -1,0 +1,14 @@
+{
+  "v": 1,
+  "id": "a0000000-0000-0000-0000-000000000001",
+  "type": "hello",
+  "ts": 1774000000000,
+  "payload": {
+    "deviceId": "dev-pixel7-01",
+    "model": "Pixel 7 Pro",
+    "osVersion": "Android 14 (API 34)",
+    "appVersion": "1.0.0",
+    "capabilities": ["mock_location", "overlay", "remote_standby"],
+    "remoteStandby": true
+  }
+}

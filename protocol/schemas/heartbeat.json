@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://peregrinegeo.dev/schemas/heartbeat.json",
+  "title": "HeartbeatPayload",
+  "type": "object",
+  "required": ["deviceId", "batteryPct", "charging", "currentMode", "activeMock"],
+  "additionalProperties": false,
+  "properties": {
+    "deviceId": { "type": "string", "minLength": 1 },
+    "batteryPct": { "type": "number", "minimum": 0, "maximum": 100 },
+    "charging": { "type": "boolean" },
+    "currentMode": {
+      "type": "string",
+      "enum": ["idle", "preview", "playing", "paused", "error"]
+    },
+    "activeMock": { "type": "boolean" }
+  }
+}

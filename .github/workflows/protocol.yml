@@ -1,0 +1,25 @@
+name: Protocol CI
+
+on:
+  push:
+    paths:
+      - 'protocol/**'
+      - '.github/workflows/protocol.yml'
+  pull_request:
+    paths:
+      - 'protocol/**'
+      - '.github/workflows/protocol.yml'
+
+jobs:
+  verify:
+    name: Verify Protocol Schemas & Fixtures
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: extractions/setup-just@v2
+
+      - name: Verify Protocol
+        run: just verify-protocol

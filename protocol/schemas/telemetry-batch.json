@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://peregrinegeo.dev/schemas/telemetry-batch.json",
+  "title": "TelemetryBatchPayload",
+  "type": "object",
+  "required": ["deviceId", "seq", "points"],
+  "additionalProperties": false,
+  "properties": {
+    "deviceId": { "type": "string", "minLength": 1 },
+    "seq": { "type": "integer", "minimum": 0 },
+    "points": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["lat", "lng", "altitude", "speed", "bearing", "accuracy", "ts"],
+        "additionalProperties": false,
+        "properties": {
+          "lat": { "type": "number", "minimum": -90, "maximum": 90 },
+          "lng": { "type": "number", "minimum": -180, "maximum": 180 },
+          "altitude": { "type": "number" },
+          "speed": { "type": "number", "minimum": 0 },
+          "bearing": { "type": "number", "minimum": 0, "maximum": 360 },
+          "accuracy": { "type": "number", "minimum": 0 },
+          "ts": { "type": "integer", "minimum": 0 },
+          "verticalAccuracy": { "type": "number", "minimum": 0 },
+          "speedAccuracy": { "type": "number", "minimum": 0 },
+          "bearingAccuracy": { "type": "number", "minimum": 0 },
+          "zoneId": { "type": "string" }
+        }
+      }
+    }
+  }
+}
