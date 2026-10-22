@@ -18,6 +18,10 @@ object CoordParser {
         "@(-?\\d+(?:\\.\\d+)?),(-?\\d+(?:\\.\\d+)?)"
     )
 
+    private val GOOGLE_MAPS_3D4D_PATTERN = Pattern.compile(
+        "!3d(-?\\d+(?:\\.\\d+)?)!4d(-?\\d+(?:\\.\\d+)?)"
+    )
+
     private val GOOGLE_MAPS_Q_PATTERN = Pattern.compile(
         "[?&](?:q|query)=(-?\\d+(?:\\.\\d+)?),(-?\\d+(?:\\.\\d+)?)"
     )
@@ -55,6 +59,14 @@ object CoordParser {
         if (atMatcher.find()) {
             val lat = atMatcher.group(1)?.toDoubleOrNull()
             val lon = atMatcher.group(2)?.toDoubleOrNull()
+            if (isValid(lat, lon)) return LatLng(lat!!, lon!!)
+        }
+
+        // 1b. Check Google Maps !3d!4d pattern
+        val d3d4Matcher = GOOGLE_MAPS_3D4D_PATTERN.matcher(trimmed)
+        if (d3d4Matcher.find()) {
+            val lat = d3d4Matcher.group(1)?.toDoubleOrNull()
+            val lon = d3d4Matcher.group(2)?.toDoubleOrNull()
             if (isValid(lat, lon)) return LatLng(lat!!, lon!!)
         }
 

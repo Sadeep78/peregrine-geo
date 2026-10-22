@@ -78,6 +78,15 @@ class CoordParserTest {
     }
 
     @Test
+    fun testGoogleMaps3d4dUrl() {
+        val url = "https://www.google.com/maps/place/Market+St/data=!4m2!3m1!1s0x0:0x0!8m2!3d37.774929!4d-122.419416"
+        val result = CoordParser.parse(url)
+        assertNotNull("Google Maps !3d!4d URL must be parsed", result)
+        assertEquals(37.774929, result!!.latitude, delta)
+        assertEquals(-122.419416, result.longitude, delta)
+    }
+
+    @Test
     fun testInvalidInputs() {
         assertNull(CoordParser.parse(null))
         assertNull(CoordParser.parse(""))
