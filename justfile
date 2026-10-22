@@ -21,6 +21,8 @@ verify-protocol:
 verify-backend:
     node --test ./backend/tests/integration.test.mjs
     node --test ./backend/tests/fleet-e2e.test.mjs
+    node --test ./backend/tests/idor.test.mjs
+    node --test ./backend/tests/idor.test.mjs
     @Write-Host "✔ Backend workspace verified" -ForegroundColor Green
 
 # Web workspace verification
@@ -47,6 +49,7 @@ test:
     node --test ./protocol/tests/contract.test.mjs
     node --test ./backend/tests/integration.test.mjs
     node --test ./backend/tests/fleet-e2e.test.mjs
+    node --test ./backend/tests/idor.test.mjs
     node --test ./web/tests/kinematics.test.mjs
     node --test ./web/tests/route-studio-e2e.test.mjs
     node --test ./tools/device-sim/tests/benchmark-500.test.mjs

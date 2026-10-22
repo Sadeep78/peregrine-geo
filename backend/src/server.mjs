@@ -56,6 +56,18 @@ export function createServer(options = {}) {
       });
     });
 
+    const getCallerOrgId = () => {
+      const authHeader = req.headers.authorization;
+      if (authHeader && authHeader.startsWith('Bearer ')) {
+        const token = authHeader.substring(7);
+        const verified = verifyToken(token);
+        if (verified && verified.orgId) {
+          return verified.orgId;
+        }
+      }
+      return 'org-default';
+    };
+
     // Health endpoints
     if (pathname === '/healthz' || pathname === '/readyz') {
       return sendJson(200, { status: 'healthy', timestamp: Date.now() });
@@ -91,7 +103,8 @@ export function createServer(options = {}) {
 
     // --- /api/v1/devices ---
     if (pathname === '/api/v1/devices/pairing-code' && method === 'POST') {
-      const result = db.createPairingCode('org-default');
+      const callerOrg = getCallerOrgId();
+      const result = db.createPairingCode(callerOrg);
       return sendJson(201, result);
     }
 
@@ -113,19 +126,29 @@ export function createServer(options = {}) {
     }
 
     if (pathname === '/api/v1/devices' && method === 'GET') {
-      const devices = db.listDevices('org-default');
+      const callerOrg = getCallerOrgId();
+      const devices = db.listDevices(callerOrg);
       return sendJson(200, { items: devices, total: devices.length });
     }
 
     // --- /api/v1/commands ---
     if (pathname === '/api/v1/commands' && method === 'POST') {
+      const callerOrg = getCallerOrgId();
       const body = await readBody();
       if (!body || !body.deviceId || !body.name) {
         return sendProblem(400, 'Bad Request', 'deviceId and name required', 'MISSING_FIELDS');
       }
 
+      const targetDev = db.devices.get(body.deviceId);
+      if (!targetDev) {
+        return sendProblem(404, 'Not Found', 'Target device not found', 'DEVICE_NOT_FOUND');
+      }
+      if (targetDev.organizationId !== callerOrg) {
+        return sendProblem(403, 'Forbidden', 'Target device belongs to another organization', 'FORBIDDEN');
+      }
+
       const idemKey = body.idempotencyKey || `idem-${Date.now()}-${Math.random()}`;
-      const cmd = db.createCommand('org-default', body.deviceId, body.name, body.params || {}, idemKey, body.ttlMs || 60000);
+      const cmd = db.createCommand(callerOrg, body.deviceId, body.name, body.params || {}, idemKey, body.ttlMs || 60000);
 
       // Attempt immediate WebSocket delivery if device is online
       const delivered = deviceManager.sendCommand(body.deviceId, cmd);
@@ -137,9 +160,10 @@ export function createServer(options = {}) {
     }
 
     if (pathname.startsWith('/api/v1/commands/') && method === 'GET') {
+      const callerOrg = getCallerOrgId();
       const commandId = pathname.replace('/api/v1/commands/', '');
       const cmd = db.commands.get(commandId);
-      if (!cmd) {
+      if (!cmd || cmd.organizationId !== callerOrg) {
         return sendProblem(404, 'Not Found', 'Command not found', 'COMMAND_NOT_FOUND');
       }
       return sendJson(200, cmd);
@@ -168,14 +192,24 @@ export function createServer(options = {}) {
     }
 
     if (pathname === '/api/v1/scenarios/start' && method === 'POST') {
+      const callerOrg = getCallerOrgId();
       const body = await readBody();
+
+      // Check IDOR on all requested devices
+      for (const devId of body.deviceIds || []) {
+        const targetDev = db.devices.get(devId);
+        if (targetDev && targetDev.organizationId !== callerOrg) {
+          return sendProblem(403, 'Forbidden', `Device '${devId}' belongs to another organization`, 'FORBIDDEN');
+        }
+      }
+
       const leadMs = Math.max(3000, body.leadMs || 3000); // At least 3s lead
       const startAt = Date.now() + leadMs;
       const scenarioRunId = `run-${Date.now()}`;
 
       // Dispatch start command to all specified devices
       for (const devId of body.deviceIds || []) {
-        const cmd = db.createCommand('org-default', devId, 'start_mock', {
+        const cmd = db.createCommand(callerOrg, devId, 'start_mock', {
           startAt,
           scenarioRunId,
           ...body.params,
@@ -183,7 +217,7 @@ export function createServer(options = {}) {
         deviceManager.sendCommand(devId, cmd);
       }
 
-      consoleManager.broadcast('org-default', {
+      consoleManager.broadcast(callerOrg, {
         v: 1,
         id: `scen-up-${Date.now()}`,
         type: 'scenario.update',
@@ -200,9 +234,10 @@ export function createServer(options = {}) {
     }
 
     if (pathname === '/api/v1/scenarios/stop-all' && method === 'POST') {
-      const allDevs = db.listDevices('org-default');
+      const callerOrg = getCallerOrgId();
+      const allDevs = db.listDevices(callerOrg);
       for (const dev of allDevs) {
-        const cmd = db.createCommand('org-default', dev.id, 'stop_mock', {}, `stop-all-${Date.now()}-${dev.id}`);
+        const cmd = db.createCommand(callerOrg, dev.id, 'stop_mock', {}, `stop-all-${Date.now()}-${dev.id}`);
         deviceManager.sendCommand(dev.id, cmd);
       }
       return sendJson(200, { message: 'All devices stopped', count: allDevs.length });
@@ -210,21 +245,24 @@ export function createServer(options = {}) {
 
     // --- /api/v1/geofences ---
     if (pathname === '/api/v1/geofences' && method === 'GET') {
-      const list = db.listGeofences('org-default');
+      const callerOrg = getCallerOrgId();
+      const list = db.listGeofences(callerOrg);
       return sendJson(200, { items: list });
     }
 
     if (pathname === '/api/v1/geofences' && method === 'POST') {
+      const callerOrg = getCallerOrgId();
       const body = await readBody();
-      const fence = db.createGeofence('org-default', body.name, body.type, body.geometry, body.radiusMeters || 100, body.webhookId);
+      const fence = db.createGeofence(callerOrg, body.name, body.type, body.geometry, body.radiusMeters || 100, body.webhookId);
       deviceManager.geofenceEvaluator.geofences.push(fence);
       return sendJson(201, fence);
     }
 
     // --- /api/v1/webhooks ---
     if (pathname === '/api/v1/webhooks' && method === 'POST') {
+      const callerOrg = getCallerOrgId();
       const body = await readBody();
-      const wh = db.createWebhook('org-default', body.url, body.secret);
+      const wh = db.createWebhook(callerOrg, body.url, body.secret);
       return sendJson(201, wh);
     }
 
