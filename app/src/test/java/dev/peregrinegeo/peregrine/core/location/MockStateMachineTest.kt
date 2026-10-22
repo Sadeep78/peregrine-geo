@@ -3,6 +3,7 @@ package dev.peregrinegeo.peregrine.core.location
 import dev.peregrinegeo.peregrine.core.geo.LatLng
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNotSame
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
@@ -68,6 +69,60 @@ class MockStateMachineTest {
         val confirmed = sm.confirmDiff()
         assertTrue(confirmed is MockState.Active)
         assertEquals(pointB, ((confirmed as MockState.Active).target as MockTarget.SinglePoint).point)
+    }
+
+    @Test
+    fun testPreviewAndActiveNeverShareStateReferences() {
+        val sm = MockStateMachine()
+        val target = MockTarget.SinglePoint(pointA)
+        val config = MockConfig(speedMps = 10.0, speedMultiplier = 1.0)
+
+        val preview = sm.selectPreview(target, config)
+        assertTrue(preview is MockState.Preview)
+
+        val active = sm.startMock()
+        assertTrue(active is MockState.Active)
+
+        // Distinct object instances
+        assertNotSame(preview, active)
+    }
+
+    @Test
+    fun testComprehensiveStateEventMatrixTable() {
+        // Test all states against illegal/noop operations
+        val statesToTest = listOf(
+            MockState.Idle,
+            MockState.Preview(MockTarget.SinglePoint(pointA)),
+            MockState.NotMockApp("permission needed"),
+            MockState.Error("fatal error", canRetry = true)
+        )
+
+        for (initialState in statesToTest) {
+            val sm = MockStateMachine(initialState)
+
+            // Calling pause on non-active states must be a safe no-op
+            val pauseResult = sm.pause()
+            assertEquals("Pause on non-active state must remain in original state", initialState, pauseResult)
+
+            // Calling resume on non-active states must be a safe no-op
+            val resumeResult = sm.resume()
+            assertEquals("Resume on non-active state must remain in original state", initialState, resumeResult)
+
+            // Calling confirmDiff on non-awaiting states must be a safe no-op
+            val confirmResult = sm.confirmDiff()
+            assertEquals("ConfirmDiff on non-awaiting state must remain in original state", initialState, confirmResult)
+
+            // Calling dismissDiff on non-awaiting states must be a safe no-op
+            val dismissResult = sm.dismissDiff()
+            assertEquals("DismissDiff on non-awaiting state must remain in original state", initialState, dismissResult)
+        }
+
+        // Test calling startMock on Idle or Error (illegal, only valid from Preview)
+        val idleSm = MockStateMachine(MockState.Idle)
+        assertEquals(MockState.Idle, idleSm.startMock())
+
+        val errSm = MockStateMachine(MockState.Error("err"))
+        assertTrue(errSm.startMock() is MockState.Error)
     }
 
     @Test

@@ -94,12 +94,8 @@ class NoiseModel(
         val alpha = exp(-dtSeconds / tau)
         val drivingSigma = preset.sigmaMeters * sqrt(max(0.0, 1.0 - alpha * alpha))
 
-        // White jitter component
-        val jitterEast = random.nextGaussian() * preset.whiteJitterMeters
-        val jitterNorth = random.nextGaussian() * preset.whiteJitterMeters
-
-        eastErrorMeters = alpha * eastErrorMeters + drivingSigma * random.nextGaussian() + jitterEast
-        northErrorMeters = alpha * northErrorMeters + drivingSigma * random.nextGaussian() + jitterNorth
+        eastErrorMeters = alpha * eastErrorMeters + drivingSigma * random.nextGaussian()
+        northErrorMeters = alpha * northErrorMeters + drivingSigma * random.nextGaussian()
         altErrorMeters = alpha * altErrorMeters + drivingSigma * random.nextGaussian() * 1.5
 
         // Multipath burst check
@@ -110,10 +106,16 @@ class NoiseModel(
             northErrorMeters += burstDist * kotlin.math.sin(burstAngle)
         }
 
+        // White measurement jitter component added to observation (not integrated into state)
+        val jitterEast = random.nextGaussian() * preset.whiteJitterMeters
+        val jitterNorth = random.nextGaussian() * preset.whiteJitterMeters
+        val totalEast = eastErrorMeters + jitterEast
+        val totalNorth = northErrorMeters + jitterNorth
+
         // 2. Convert ENU error to Lat/Lon offsets
         val latRad = Math.toRadians(truePoint.latitude)
-        val dLat = Math.toDegrees(northErrorMeters / GeoMath.EARTH_RADIUS_METERS)
-        val dLon = Math.toDegrees(eastErrorMeters / (GeoMath.EARTH_RADIUS_METERS * cos(latRad)))
+        val dLat = Math.toDegrees(totalNorth / GeoMath.EARTH_RADIUS_METERS)
+        val dLon = Math.toDegrees(totalEast / (GeoMath.EARTH_RADIUS_METERS * cos(latRad)))
 
         val noisyLat = (truePoint.latitude + dLat).coerceIn(-90.0, 90.0)
         val noisyLon = ((truePoint.longitude + dLon + 540.0) % 360.0) - 180.0
@@ -121,7 +123,7 @@ class NoiseModel(
         val noisyAlt = baseAlt + altErrorMeters
 
         // 3. Realistic dynamic reported accuracy (consistent with injected error, non-constant)
-        val instantaneousError = sqrt(eastErrorMeters * eastErrorMeters + northErrorMeters * northErrorMeters)
+        val instantaneousError = sqrt(totalEast * totalEast + totalNorth * totalNorth)
         val horizontalAccuracy = (1.5 * preset.sigmaMeters + 0.3 * instantaneousError + 0.2 * abs(random.nextGaussian()))
             .coerceIn(1.0, 50.0)
         val verticalAccuracy = (horizontalAccuracy * 1.5).coerceIn(1.5, 75.0)

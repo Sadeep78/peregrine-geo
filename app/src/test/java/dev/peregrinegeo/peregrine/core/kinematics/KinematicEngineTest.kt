@@ -202,4 +202,76 @@ class KinematicEngineTest {
         println("Performance benchmark: Average step time = ${String.format("%.4f", avgMsPerStep)} ms")
         assertTrue("Average engine step time must be under 0.2 ms, got: $avgMsPerStep ms", avgMsPerStep < 0.2)
     }
+
+    @Test
+    fun testAntimeridianAndPolarEdgeCases() {
+        // 1. Antimeridian crossing (179.99 to -179.99)
+        val antimeridianPoints = listOf(
+            RoutePoint(0.0, 179.99),
+            RoutePoint(0.0, -179.99)
+        )
+        val plannedAntimeridian = SpeedProfilePlanner.plan(antimeridianPoints, MotionProfile.Drive, PlayMode.Once)
+        val engineAntimeridian = KinematicMovementEngine(plannedAntimeridian, NoiseModel(NoisePreset.Ideal), tickHz = 10)
+        assertTrue(plannedAntimeridian.totalDistanceMeters > 0.0)
+        assertTrue(plannedAntimeridian.totalDistanceMeters < 50_000.0) // ~22 km
+
+        var steps = 0
+        while (!engineAntimeridian.isCompleted && steps < 2500) {
+            engineAntimeridian.step()
+            steps++
+        }
+        assertTrue("Antimeridian crossing must complete without loop", engineAntimeridian.isCompleted)
+
+        // 2. Polar route (lat 85 to 86)
+        val polarPoints = listOf(
+            RoutePoint(85.0, 0.0),
+            RoutePoint(86.0, 0.0)
+        )
+        val plannedPolar = SpeedProfilePlanner.plan(polarPoints, MotionProfile.Walk, PlayMode.Once)
+        val enginePolar = KinematicMovementEngine(plannedPolar, NoiseModel(NoisePreset.Ideal), tickHz = 10)
+        val polarOut = enginePolar.step()
+        assertTrue(polarOut.truePosition.latitude >= 85.0)
+
+        // 3. Duplicate and zero-length segment
+        val duplicatePoints = listOf(
+            RoutePoint(37.7700, -122.4100),
+            RoutePoint(37.7700, -122.4100), // identical point
+            RoutePoint(37.7705, -122.4100)
+        )
+        val plannedDup = SpeedProfilePlanner.plan(duplicatePoints, MotionProfile.Walk, PlayMode.Once)
+        val engineDup = KinematicMovementEngine(plannedDup, NoiseModel(NoisePreset.Ideal), tickHz = 10)
+        assertTrue(plannedDup.totalDistanceMeters > 0.0)
+        var dupSteps = 0
+        while (!engineDup.isCompleted && dupSteps < 2000) {
+            engineDup.step()
+            dupSteps++
+        }
+        assertTrue("Duplicate points route must complete", engineDup.isCompleted)
+    }
+
+    @Test
+    fun testNoiseStatisticsOverLongRun() {
+        val planned = SpeedProfilePlanner.plan(straightWalkPoints, MotionProfile.Walk, PlayMode.Once)
+        val noiseModel = NoiseModel(NoisePreset.OpenSky, seed = 777L)
+        val engine = KinematicMovementEngine(planned, noiseModel, tickHz = 10)
+
+        val errors = mutableListOf<Double>()
+        val accuracies = mutableSetOf<Double>()
+
+        for (i in 0 until 1000) {
+            val out = engine.step()
+            val distError = GeoMath.distanceMeters(out.truePosition, out.noisyPosition)
+            errors.add(distError)
+            accuracies.add(Math.round(out.horizontalAccuracyMeters * 100.0) / 100.0)
+        }
+
+        val meanError = errors.average()
+        val variance = errors.map { (it - meanError) * (it - meanError) }.average()
+        val stdDev = Math.sqrt(variance)
+
+        // OpenSky sigma is 1.5m -> mean radial error should be roughly around 1.0-2.5m
+        assertTrue("Mean error should be realistic: $meanError", meanError in 0.5..3.5)
+        assertTrue("Standard deviation should be near expected range: $stdDev", stdDev in 0.5..2.5)
+        assertTrue("Reported accuracy must not be constant over 1000 steps", accuracies.size >= 10)
+    }
 }

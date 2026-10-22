@@ -59,7 +59,7 @@ sealed interface MockState {
 
     data class Preview(
         val target: MockTarget,
-        val config: MockConfig
+        val config: MockConfig = MockConfig()
     ) : MockState
 
     data class Active(
