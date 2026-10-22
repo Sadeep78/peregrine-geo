@@ -7,7 +7,7 @@
   "scripts": {
     "lint": "node -e \"console.log('Web lint passed')\"",
     "typecheck": "node -e \"console.log('Web typecheck passed')\"",
-    "test": "node -e \"console.log('Web unit tests passed')\"",
+    "test": "node --test ./tests/kinematics.test.mjs && node --test ./tests/route-studio-e2e.test.mjs",
     "build": "node -e \"console.log('Web build passed')\"",
     "start": "node -e \"console.log('Web start placeholder')\""
   },

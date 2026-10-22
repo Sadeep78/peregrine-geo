@@ -25,7 +25,9 @@ verify-backend:
 
 # Web workspace verification
 verify-web:
-    @Write-Host "✔ Web workspace verified"
+    node --test ./web/tests/kinematics.test.mjs
+    node --test ./web/tests/route-studio-e2e.test.mjs
+    @Write-Host "✔ Web workspace verified (Kinematics & Route Studio E2E)" -ForegroundColor Green
 
 # Tools / device-sim verification
 verify-tools:
@@ -40,11 +42,13 @@ lint:
 typecheck:
     @Write-Host "✔ Typecheck: Protocol and TypeScript workspace schemas valid"
 
-# Run tests across workspaces (Protocol contract tests, backend tests, device-sim benchmark, and Android/Kotlin engine tests)
+# Run tests across workspaces (Protocol contract tests, backend tests, web tests, device-sim benchmark, and Android/Kotlin engine tests)
 test:
     node --test ./protocol/tests/contract.test.mjs
     node --test ./backend/tests/integration.test.mjs
     node --test ./backend/tests/fleet-e2e.test.mjs
+    node --test ./web/tests/kinematics.test.mjs
+    node --test ./web/tests/route-studio-e2e.test.mjs
     node --test ./tools/device-sim/tests/benchmark-500.test.mjs
     node ./scripts/test-kotlin.mjs
 
