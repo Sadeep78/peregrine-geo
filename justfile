@@ -68,6 +68,7 @@ cloud-down:
 clean:
     node -e "const fs = require('fs'); if (fs.existsSync('protocol/dist')) fs.rmSync('protocol/dist', { recursive: true, force: true }); console.log('Clean complete');"
 
-# Release verification
+# Release verification and packaging
 release: verify
-    @Write-Host "✔ Release verification passed" -ForegroundColor Green
+    node ./scripts/build-release.mjs
+    @Write-Host "✔ Release verification and packaging passed" -ForegroundColor Green
