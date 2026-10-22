@@ -40,6 +40,9 @@ pnpm-debug.log*
 .DS_Store
 Thumbs.db
 
+# Test libs & tools
+tools/test-libs/
+
 # Test coverage
 coverage/
 .nyc_output/

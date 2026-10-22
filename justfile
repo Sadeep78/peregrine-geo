@@ -37,9 +37,10 @@ lint:
 typecheck:
     @Write-Host "✔ Typecheck: Protocol and TypeScript workspace schemas valid"
 
-# Run tests across workspaces
+# Run tests across workspaces (Protocol contract tests and Android/Kotlin engine tests)
 test:
     node --test ./protocol/tests/contract.test.mjs
+    node ./scripts/test-kotlin.mjs
 
 # Build artifacts across workspaces
 build:
