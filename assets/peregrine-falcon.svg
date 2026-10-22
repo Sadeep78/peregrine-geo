@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0a0f1d"/>
+      <stop offset="100%" stop-color="#050811"/>
+    </linearGradient>
+    <linearGradient id="falconCyan" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00f0ff"/>
+      <stop offset="50%" stop-color="#0080ff"/>
+      <stop offset="100%" stop-color="#0040aa"/>
+    </linearGradient>
+    <linearGradient id="wingGrad" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#0055cc"/>
+      <stop offset="50%" stop-color="#00b4d8"/>
+      <stop offset="100%" stop-color="#90e0ef"/>
+    </linearGradient>
+    <linearGradient id="goldEye" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffe600"/>
+      <stop offset="100%" stop-color="#ff9100"/>
+    </linearGradient>
+    <filter id="cyanGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="6" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  <!-- Circular Base -->
+  <circle cx="200" cy="200" r="185" fill="url(#bgGrad)" stroke="#1e293b" stroke-width="4"/>
+  <circle cx="200" cy="200" r="185" fill="none" stroke="#00f0ff" stroke-width="1.5" stroke-dasharray="12 8" opacity="0.4"/>
+
+  <!-- Geospatial Radar Orbit Rings -->
+  <circle cx="200" cy="200" r="140" fill="none" stroke="#00f0ff" stroke-width="1" opacity="0.15"/>
+  <circle cx="200" cy="200" r="95" fill="none" stroke="#0080ff" stroke-width="1" opacity="0.2"/>
+  <line x1="200" y1="15" x2="200" y2="45" stroke="#00f0ff" stroke-width="2" opacity="0.6"/>
+  <line x1="200" y1="355" x2="200" y2="385" stroke="#00f0ff" stroke-width="2" opacity="0.6"/>
+  <line x1="15" y1="200" x2="45" y2="200" stroke="#00f0ff" stroke-width="2" opacity="0.6"/>
+  <line x1="355" y1="200" x2="385" y2="200" stroke="#00f0ff" stroke-width="2" opacity="0.6"/>
+
+  <!-- Peregrine Falcon In Supersonic Stoop / Dynamic Profile -->
+  <g filter="url(#cyanGlow)">
+    <!-- Main Left Aerodynamic Wing -->
+    <path d="M 195 195 L 45 105 Q 120 70 215 110 L 260 145 Z" fill="url(#wingGrad)" opacity="0.95"/>
+    <path d="M 180 205 L 75 145 Q 130 115 195 145 Z" fill="#003580" opacity="0.8"/>
+
+    <!-- Right Primary Swept Wing -->
+    <path d="M 205 195 L 355 105 Q 280 70 185 110 L 140 145 Z" fill="url(#wingGrad)" opacity="0.95"/>
+    <path d="M 220 205 L 325 145 Q 270 115 205 145 Z" fill="#003580" opacity="0.8"/>
+
+    <!-- Falcon Body & Stoop Keel -->
+    <path d="M 200 80 Q 235 130 225 240 Q 200 320 200 335 Q 200 320 175 240 Q 165 130 200 80 Z" fill="url(#falconCyan)"/>
+
+    <!-- Tail Feathers -->
+    <polygon points="200,345 175,270 200,290 225,270" fill="#00f0ff" opacity="0.9"/>
+    <polygon points="200,360 185,310 200,325 215,310" fill="#90e0ef"/>
+
+    <!-- Falcon Head & Fierce Beak -->
+    <path d="M 180 115 Q 200 65 220 115 Q 200 135 180 115 Z" fill="#ffffff"/>
+    <path d="M 193 72 L 200 50 L 207 72 Z" fill="#ffb703"/> <!-- Hooked Apex Beak -->
+    <path d="M 196 62 L 200 50 L 204 62 Z" fill="#000000"/>
+
+    <!-- Fierce Falcon Eyes -->
+    <circle cx="188" cy="92" r="6" fill="#050811"/>
+    <circle cx="188" cy="92" r="4.5" fill="url(#goldEye)"/>
+    <circle cx="188" cy="92" r="2.5" fill="#000000"/>
+    <circle cx="187" cy="90" r="1" fill="#ffffff"/>
+
+    <circle cx="212" cy="92" r="6" fill="#050811"/>
+    <circle cx="212" cy="92" r="4.5" fill="url(#goldEye)"/>
+    <circle cx="212" cy="92" r="2.5" fill="#000000"/>
+    <circle cx="213" cy="90" r="1" fill="#ffffff"/>
+
+    <!-- Aerodynamic Speed Streamlines -->
+    <path d="M 155 170 Q 200 230 200 280" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" opacity="0.85"/>
+    <path d="M 245 170 Q 200 230 200 280" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" opacity="0.85"/>
+  </g>
+
+  <!-- Geospatial Location Pulse Node at Focal Center -->
+  <circle cx="200" cy="200" r="6" fill="#ffffff" filter="url(#cyanGlow)"/>
+  <circle cx="200" cy="200" r="14" fill="none" stroke="#00f0ff" stroke-width="2" opacity="0.8"/>
+  <circle cx="200" cy="200" r="24" fill="none" stroke="#00f0ff" stroke-width="1" stroke-dasharray="3 3" opacity="0.5"/>
+</svg>

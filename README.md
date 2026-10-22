@@ -1,6 +1,8 @@
-# 🦅 Peregrine (`peregrine-geo`)
-
 <div align="center">
+
+<img src="assets/peregrine-falcon.png" alt="Peregrine Falcon Logo" width="220" style="border-radius: 20px; box-shadow: 0 8px 32px rgba(0, 240, 255, 0.2);" />
+
+# Peregrine (`peregrine-geo`)
 
 **Enterprise-Grade Android Mock-Location Client, Kinematic Simulation Engine & Cloud Fleet Console**
 
