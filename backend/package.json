@@ -3,19 +3,20 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "Peregrine Backend REST and WebSocket Service",
+  "main": "./dist/index.js",
   "scripts": {
-    "lint": "node -e \"console.log('Backend lint passed')\"",
+    "lint": "node ./scripts/lint.mjs",
     "typecheck": "node -e \"console.log('Backend typecheck passed')\"",
-    "test": "node --test tests/**/*.test.mjs || true",
-    "build": "node -e \"console.log('Backend build passed')\"",
-    "start": "node dist/index.js"
+    "test": "node --test tests/**/*.test.mjs",
+    "build": "node ./scripts/build.mjs",
+    "start": "node src/server.mjs"
   },
   "dependencies": {
-    "@hono/node-server": "^1.13.8",
-    "@hono/node-ws": "^1.0.6",
     "@peregrine/protocol": "*",
     "hono": "^4.7.2",
-    "zod": "^3.24.2"
+    "@hono/node-server": "^1.13.8",
+    "@hono/node-ws": "^1.0.6",
+    "zod": "^3.24.2",
+    "ws": "^8.18.0"
   }
 }

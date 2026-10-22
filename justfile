@@ -19,15 +19,17 @@ verify-protocol:
 
 # Backend workspace verification
 verify-backend:
-    node -e "console.log('✔ Backend workspace verified')"
+    node --test ./backend/tests/integration.test.mjs
+    @Write-Host "✔ Backend workspace verified" -ForegroundColor Green
 
 # Web workspace verification
 verify-web:
-    node -e "console.log('✔ Web workspace verified')"
+    @Write-Host "✔ Web workspace verified"
 
 # Tools / device-sim verification
 verify-tools:
-    node -e "console.log('✔ Device-sim workspace verified')"
+    node --test ./tools/device-sim/tests/benchmark-500.test.mjs
+    @Write-Host "✔ Device-sim workspace verified (500 devices @ 1 Hz)" -ForegroundColor Green
 
 # Lint all touched workspaces
 lint:
@@ -37,9 +39,11 @@ lint:
 typecheck:
     @Write-Host "✔ Typecheck: Protocol and TypeScript workspace schemas valid"
 
-# Run tests across workspaces (Protocol contract tests and Android/Kotlin engine tests)
+# Run tests across workspaces (Protocol contract tests, backend tests, device-sim benchmark, and Android/Kotlin engine tests)
 test:
     node --test ./protocol/tests/contract.test.mjs
+    node --test ./backend/tests/integration.test.mjs
+    node --test ./tools/device-sim/tests/benchmark-500.test.mjs
     node ./scripts/test-kotlin.mjs
 
 # Build artifacts across workspaces
